@@ -1,0 +1,49 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 50px;
+  color: white;
+}
+
+.App-welcome{
+  margin:10px;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+a{
+  color: aliceblue;
+}
+
+a:hover{
+  color: aqua;
+}
+
+.row{
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.container-fluid{
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+img{
+  height: 93vh;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
