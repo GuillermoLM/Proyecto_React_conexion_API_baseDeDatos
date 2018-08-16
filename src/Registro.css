@@ -1,10 +1,10 @@
 @media all and (min-width: 480px) {
-    .Login {
+    .Registro {
       padding: 60px 0;
       text-align: center;
     }
   
-    .Login form {
+    .Registro form {
       margin: 0 auto;
       max-width: 320px;
     }
