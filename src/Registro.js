@@ -13,9 +13,13 @@ export default class Registro extends Component {
           lastname:""
         };
       }
+
+      sendLogin(){
+        alert("ves a Login");
+      }
     
       validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0;
+        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.name.length > 0 && this.state.lastname.length > 0;
       }
     
       handleChange = event => {
@@ -25,14 +29,14 @@ export default class Registro extends Component {
       }
     
       handleSubmit = event => {
-        event.preventDefault();
+       
       }
     
     render(){
         return(
             <div className="Registro">
             <h4>Introduce tus datos para el registro</h4>
-                <form onSubmit={this.handleSubmit}>
+                <form  >
                     <FormGroup controlId="email" bsSize="large">
                     <ControlLabel>Email</ControlLabel>
                     <FormControl
@@ -77,6 +81,7 @@ export default class Registro extends Component {
                         bsSize="large"
                         disabled={!this.validateForm()}
                         type="submit"
+                        onClick="sendLogin"
                     >
                     Registro
                     </Button>

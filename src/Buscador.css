@@ -1,0 +1,13 @@
+@media all and (min-width: 480px) {
+    .Buscador {
+        padding: 10px;
+    }
+  
+    .Buscador form {
+      margin: 0 auto;
+    }
+
+    #deporte, #ciudad{
+        max-width: 200px;
+    }
+  }

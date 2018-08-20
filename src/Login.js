@@ -30,7 +30,7 @@ export default class Login extends Component {
     return (
       <div className="Login">
         <h4>Haz Login</h4>
-        <form onSubmit={this.handleSubmit}>
+        <form action="https://dev.entrenar.me/api/v3/oauth/access_token" method="post"onSubmit={this.handleSubmit}>
           <FormGroup controlId="email" bsSize="large">
             <ControlLabel>Email</ControlLabel>
             <FormControl
@@ -53,6 +53,7 @@ export default class Login extends Component {
             bsSize="large"
             disabled={!this.validateForm()}
             type="submit"
+            href="/buscador"
           >
             Login
           </Button>
