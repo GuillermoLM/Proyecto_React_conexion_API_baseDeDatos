@@ -10,4 +10,10 @@
     #deporte, #ciudad{
         max-width: 200px;
     }
+
+    #btnRanking{
+        max-width: 250px;
+        max-height: 60px;
+        margin: 35px;
+    }
   }

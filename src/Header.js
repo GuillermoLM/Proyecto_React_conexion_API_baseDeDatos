@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import logo from './logo.svg';
 
 class Header extends Component{
@@ -19,13 +20,13 @@ class Header extends Component{
                 <div className="collapse navbar-collapse" id="navbarNav">
                   <ul className="navbar-nav">
                     <li className="nav-item">
-                        <a className="nav-link" href="/">Home</a>
+                        <Link className="nav-link" to="/">Home</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="login">Login</a>
+                        <Link className="nav-link" to="login">Login</Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="registro">Registro</a>
+                        <Link className="nav-link" to="registro">Registro</Link>
                     </li>
                   </ul>
                 </div>

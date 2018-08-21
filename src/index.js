@@ -8,9 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render( 
     <div>
-        <Header/>
         <AppRoutes/>
     </div>
  , document.getElementById('root'));
-// ReactDOM.render(<Login />, document.getElementById('root'));
 registerServiceWorker();

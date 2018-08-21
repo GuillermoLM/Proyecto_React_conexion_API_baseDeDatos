@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import './Registro.css';
-
+import api from './apiService.js'
 export default class Registro extends Component {
     constructor(props) {
         super(props);
@@ -9,17 +9,13 @@ export default class Registro extends Component {
         this.state = {
           email: "",
           password: "",
-          name: "",
+          firstname: "",
           lastname:""
         };
       }
 
-      sendLogin(){
-        alert("ves a Login");
-      }
-    
       validateForm() {
-        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.name.length > 0 && this.state.lastname.length > 0;
+        return this.state.email.length > 0 && this.state.password.length > 0 && this.state.firstname.length > 0 && this.state.lastname.length > 0;
       }
     
       handleChange = event => {
@@ -29,14 +25,15 @@ export default class Registro extends Component {
       }
     
       handleSubmit = event => {
-       
+        event.preventDefault();
+        api.register(this.state).then(this.props.history.push("/login")).catch(console.error)
       }
     
     render(){
         return(
             <div className="Registro">
             <h4>Introduce tus datos para el registro</h4>
-                <form  >
+                <form onSubmit={this.handleSubmit.bind(this)} >
                     <FormGroup controlId="email" bsSize="large">
                     <ControlLabel>Email</ControlLabel>
                     <FormControl
@@ -56,12 +53,13 @@ export default class Registro extends Component {
                     />
                     </FormGroup>
 
-                    <FormGroup controlId="name" bsSize="large">
+                    <FormGroup controlId="firstname" bsSize="large">
                     <ControlLabel>Nombre</ControlLabel>
                     <FormControl
                         autoFocus
                         type="text"
-                        value={this.state.name}
+                      
+                        value={this.state.firstname}
                         onChange={this.handleChange}
                     />
                     </FormGroup>
@@ -81,7 +79,6 @@ export default class Registro extends Component {
                         bsSize="large"
                         disabled={!this.validateForm()}
                         type="submit"
-                        onClick="sendLogin"
                     >
                     Registro
                     </Button>
