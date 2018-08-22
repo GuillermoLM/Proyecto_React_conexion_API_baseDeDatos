@@ -16,6 +16,9 @@ export default class Buscador extends Component {
           sport: '',
           city:'',
           place_id:'',
+          dataRecibida:[
+
+          ],
         };
       }
     
@@ -32,13 +35,9 @@ export default class Buscador extends Component {
         
         geocodeByAddress(selected)
           .then(res => this.setState({place_id: res[0].place_id }))
-        //   .then(({ lat, lng }) => {
-        //     this.setState({
-        //     });
-        //     })
           .catch(error => {
             this.setState({ isGeocoding: false });
-            console.log('error', error); // eslint-disable-line no-console
+            console.log('error', error); 
           });
       };
     
@@ -46,13 +45,11 @@ export default class Buscador extends Component {
         this.setState({
           address: '',
           place_id: '',
-          latitude: null,
-          longitude: null,
         });
     };
     
     handleError = (status, clearSuggestions) => {
-        console.log('Error from Google Maps API', status); // eslint-disable-line no-console
+        console.log('Error from Google Maps API', status); 
         this.setState({ errorMessage: status }, () => {
           clearSuggestions();
         });
@@ -60,7 +57,26 @@ export default class Buscador extends Component {
 
     handleSubmit = event => {
         event.preventDefault();
-        api.ranking(this.state.sport, this.state.place_id ).then(console.log)
+        api.ranking(this.state.sport, this.state.place_id )
+        .then(
+           
+            res => { 
+                console.log(res);
+                this.setState({dataRecibida: res.data})
+            }
+        )
+        // .then(
+        //     console.log,
+        //     result => this.setState({
+        //         dataRecibida: result.data.data
+        //     }),
+        // )
+        // .then(
+        //     console.log,
+        //     results => results.json,
+        //     results => this.setState({dataRecibida: results},
+        //     console.log(results))
+        // )
       }
 
     render(){
@@ -151,12 +167,50 @@ export default class Buscador extends Component {
                                 type="submit"
                                 id="btnRanking"
                             >
-                            Ver Ranking
+                            Ver Datos
                             </Button>
                         </div>
                     </div>
                 </form>
-                <div className="row">
+                {this.state.dataRecibida.map(item => 
+                    <div>
+                        <div className="row">
+                            <div className="col-2 d-flex justify-content-center">
+                                <b>Ciudad</b>
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                <b>Identificador</b> 
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                <b>Presupuesto Mensual</b>
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                <b>Precio por Mensaje</b>
+                            </div>
+                            <div className="col-4 d-flex justify-content-center">
+                                <b>Deporte</b>
+                            </div>
+                        </div>
+                        <div className="row barraDatos">
+                            <div className="col-2 d-flex justify-content-center">
+                                {item.city} 
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                {item.id} 
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                {item.monthly_budget}€ 
+                            </div>
+                            <div className="col-2 d-flex justify-content-center">
+                                {item.price_per_lead}€ 
+                            </div>
+                            <div className="col-4 d-flex justify-content-center">
+                                {item.sport_name} 
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {/* <div className="row">
                     <div className="col-12 d-flex justify-content-center">
                         <XYPlot
                             width={400}
@@ -172,7 +226,7 @@ export default class Buscador extends Component {
                                 <YAxis />
                         </XYPlot>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }

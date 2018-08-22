@@ -41,7 +41,7 @@ const ranking = (sport_id, place_id) => new Promise((resolve,reject) => {
         if (response.data.error) {
             reject(response)
         } else {
-            resolve(response)
+            resolve(response.data);
         }
        })
        .catch(function (error) {
