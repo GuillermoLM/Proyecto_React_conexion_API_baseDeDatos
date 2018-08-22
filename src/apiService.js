@@ -35,6 +35,20 @@ const login = data => new Promise((resolve, reject) => {
     })
 })
 
+const ranking = (sport_id, place_id) => new Promise((resolve,reject) => {
+    axios.get('https://dev.entrenar.me/api/test/sports?sport_id='+sport_id+'&place_id='+place_id)
+    .then(function (response) {
+        if (response.data.error) {
+            reject(response)
+        } else {
+            resolve(response)
+        }
+       })
+       .catch(function (error) {
+        reject(error);
+        })
+})
 
 
-export default { register, login }
+
+export default { register, login, ranking }

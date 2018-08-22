@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import PlacesAutocomplete, {
-    geocodeByAddress,
-    getLatLng,
-  } from 'react-places-autocomplete';
+import PlacesAutocomplete, {geocodeByAddress,getLatLng,} from 'react-places-autocomplete';
 import {classnames} from "./helpers";
 import './Buscador.css';
+import api from './apiService.js';
+import {XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries} from 'react-vis';
 
 export default class Buscador extends Component {
 
@@ -14,32 +13,29 @@ export default class Buscador extends Component {
         this.state = {
           address: '',
           errorMessage: '',
-          latitude: null,
-          longitude: null,
-          isGeocoding: false,
+          sport: '',
+          city:'',
+          place_id:'',
         };
       }
     
     handleChange = address => {
         this.setState({
           address,
-          latitude: null,
-          longitude: null,
-          errorMessage: '',
         });
     };
     
     handleSelect = selected => {
-        this.setState({ isGeocoding: true, address: selected });
+        this.setState({
+            address: selected,
+          });
+        
         geocodeByAddress(selected)
-          .then(res => getLatLng(res[0]))
-          .then(({ lat, lng }) => {
-            this.setState({
-              latitude: lat,
-              longitude: lng,
-              isGeocoding: false,
-            });
-            })
+          .then(res => this.setState({place_id: res[0].place_id }))
+        //   .then(({ lat, lng }) => {
+        //     this.setState({
+        //     });
+        //     })
           .catch(error => {
             this.setState({ isGeocoding: false });
             console.log('error', error); // eslint-disable-line no-console
@@ -49,6 +45,7 @@ export default class Buscador extends Component {
     handleCloseClick = () => {
         this.setState({
           address: '',
+          place_id: '',
           latitude: null,
           longitude: null,
         });
@@ -61,23 +58,25 @@ export default class Buscador extends Component {
         });
     };
 
+    handleSubmit = event => {
+        event.preventDefault();
+        api.ranking(this.state.sport, this.state.place_id ).then(console.log)
+      }
+
     render(){
         const {
             address,
             errorMessage,
-            latitude,
-            longitude,
-            isGeocoding,
           } = this.state;
         return(
             <div className="Buscador">
-                <form>
+                <form onSubmit={this.handleSubmit.bind(this)}>
                     <div className="row">
                         <div className="col-6 d-flex justify-content-end">
                             <div>
                                 <PlacesAutocomplete
                                     onChange={this.handleChange}
-                                    value={address}
+                                    value={this.state.address}
                                     onSelect={this.handleSelect}
                                     onError={this.handleError}
                                     shouldFetchSuggestions={address.length > 2}
@@ -87,8 +86,12 @@ export default class Buscador extends Component {
                                     <div className="search-bar-container">
                                         <div className="search-input-container">
                                             <input
+                                                value={this.state.city} 
+                                                onChange={e => this.setState({city: e.target.value})}
+
                                                 {...getInputProps({
                                                 placeholder: 'Busca tu ciudad...',
+                                                
                                                 className: 'search-input',
                                                 })}
                                             />
@@ -108,7 +111,6 @@ export default class Buscador extends Component {
                                                     'suggestion-item--active': suggestion.active,
                                                 });
                                                 return (
-                                                /* eslint-disable react/jsx-key */
                                                     <div
                                                         {...getSuggestionItemProps(suggestion, { className })}
                                                     >
@@ -120,7 +122,6 @@ export default class Buscador extends Component {
                                                     </small>
                                                 </div>
                                                 );
-                                                /* eslint-enable react/jsx-key */
                                             })}
                                         </div>
                                     )}
@@ -138,13 +139,16 @@ export default class Buscador extends Component {
                             <FormGroup controlId="deporte" bsSize="small">
                             <ControlLabel>Deporte</ControlLabel>
                             <FormControl
-                             type="text"
+                                value={this.state.sport} 
+                                onChange={e => this.setState({sport: e.target.value})}
+                                type="number"
+                                placeholder="Introduce un número"
                             />
                             </FormGroup>
 
                             <Button 
                                 bsSize="small"
-                                type="button"
+                                type="submit"
                                 id="btnRanking"
                             >
                             Ver Ranking
@@ -152,6 +156,23 @@ export default class Buscador extends Component {
                         </div>
                     </div>
                 </form>
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <XYPlot
+                            width={400}
+                            height={400}>
+                            <HorizontalGridLines />
+                                <LineSeries
+                                    data={[
+                                        {x: 1, y: 10},
+                                        {x: 2, y: 5},
+                                        {x: 3, y: 15}
+                                    ]}/>
+                                <XAxis />
+                                <YAxis />
+                        </XYPlot>
+                    </div>
+                </div>
             </div>
         );
     }

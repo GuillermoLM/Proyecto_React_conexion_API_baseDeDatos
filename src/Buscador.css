@@ -7,8 +7,8 @@
       margin: 0 auto;
     }
 
-    #deporte, #ciudad{
-        max-width: 200px;
+    #deporte{
+        max-width: 400px;
     }
 
     #btnRanking{
