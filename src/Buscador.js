@@ -22,8 +22,10 @@ export default class Buscador extends Component {
           takeMax: '',
           max_price_per_lead: null,
           min_price_per_lead: null,
+          media_price_per_lead: null,
           max_monthly_budget: null,
           min_monthly_budget: null,
+          media_monthly_budget: null,
         };
       }
     
@@ -67,12 +69,18 @@ export default class Buscador extends Component {
             res => { 
                 let maxPpL = Math.max(...res.data.map(item => item.price_per_lead));
                 let minPpL = Math.min(...res.data.map(item => item.price_per_lead));
-
+                let valuesPpl = res.data.map(item => item.price_per_lead);
+                let sumPpl = valuesPpl.reduce((previous, current) => current += previous);
+                let avgPpl = (sumPpl / valuesPpl.length).toFixed(2);
+                
                 let maxMb = Math.max(...res.data.map(item => item.monthly_budget))
                 let minMb = Math.min(...res.data.map(item => item.monthly_budget))
+                let valuesMb = res.data.map(item => item.monthly_budget);
+                let sumMb = valuesMb.reduce((previous, current) => current += previous);
+                let avgMb = (sumMb / valuesMb.length).toFixed(2);
 
                 console.log(res);
-                this.setState({dataRecibida: res.data, max_price_per_lead: maxPpL, min_price_per_lead: minPpL, max_monthly_budget: maxMb, min_monthly_budget: minMb});
+                this.setState({dataRecibida: res.data, max_price_per_lead: maxPpL, min_price_per_lead: minPpL, max_monthly_budget: maxMb, min_monthly_budget: minMb, media_price_per_lead: avgPpl, media_monthly_budget: avgMb});
             }
         )
       }
@@ -181,7 +189,13 @@ export default class Buscador extends Component {
                     <div className="col-12 d-flex justify-content-center">
                         <p>El precio por mensaje mínimo es de: {this.state.min_price_per_lead}€</p>
                     </div> 
-                </div>)}    
+                </div>)}
+                {this.state.media_price_per_lead && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El precio por mensaje medio es de: {this.state.media_price_per_lead}€</p>
+                    </div> 
+                </div>)}       
                 {this.state.max_monthly_budget && ( 
                 <div className="row">
                     <div className="col-12 d-flex justify-content-center">
@@ -192,6 +206,12 @@ export default class Buscador extends Component {
                 <div className="row">
                     <div className="col-12 d-flex justify-content-center">
                         <p>El presupuesto mínimo es de: {this.state.min_monthly_budget}€</p>
+                    </div> 
+                </div>)}
+                {this.state.media_monthly_budget && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El presupuesto medio es de: {this.state.media_monthly_budget}€</p>
                     </div> 
                 </div>)}
             
