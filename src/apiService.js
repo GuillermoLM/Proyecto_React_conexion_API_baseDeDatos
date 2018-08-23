@@ -35,8 +35,32 @@ const login = data => new Promise((resolve, reject) => {
     })
 })
 
-const ranking = (sport_id, place_id) => new Promise((resolve,reject) => {
+const datos = (sport_id, place_id) => new Promise((resolve,reject) => {
     axios.get('https://dev.entrenar.me/api/test/sports?sport_id='+sport_id+'&place_id='+place_id)
+    .then(function (response) {
+        if (response.data.error) {
+            reject(response)
+        } else {
+            resolve(response.data);
+        }
+       })
+       .catch(function (error) {
+        reject(error);
+        })
+})
+
+const generarR = (entity_id, sport_id) => new Promise((resolve, reject) => {
+    axios.post('https://dev.entrenar.me/api/test/ranking',{entity_id,sport_id,ranking:'ranking'})
+    .then(function (response) {
+        resolve(response);
+       })
+       .catch(function (error) {
+        reject(error);
+        })
+})
+
+const visualizarR = data => new Promise((resolve, reject) => {
+    axios.get('https://dev.entrenar.me/api/test/ranking')
     .then(function (response) {
         if (response.data.error) {
             reject(response)
@@ -51,4 +75,4 @@ const ranking = (sport_id, place_id) => new Promise((resolve,reject) => {
 
 
 
-export default { register, login, ranking }
+export default {register, login, datos, generarR, visualizarR}
