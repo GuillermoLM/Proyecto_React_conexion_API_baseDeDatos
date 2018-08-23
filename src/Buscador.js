@@ -19,6 +19,11 @@ export default class Buscador extends Component {
           dataRecibida:[
 
           ],
+          takeMax: '',
+          max_price_per_lead: null,
+          min_price_per_lead: null,
+          max_monthly_budget: null,
+          min_monthly_budget: null,
         };
       }
     
@@ -59,24 +64,17 @@ export default class Buscador extends Component {
         event.preventDefault();
         api.ranking(this.state.sport, this.state.place_id )
         .then(
-           
             res => { 
+                let maxPpL = Math.max(...res.data.map(item => item.price_per_lead));
+                let minPpL = Math.min(...res.data.map(item => item.price_per_lead));
+
+                let maxMb = Math.max(...res.data.map(item => item.monthly_budget))
+                let minMb = Math.min(...res.data.map(item => item.monthly_budget))
+
                 console.log(res);
-                this.setState({dataRecibida: res.data})
+                this.setState({dataRecibida: res.data, max_price_per_lead: maxPpL, min_price_per_lead: minPpL, max_monthly_budget: maxMb, min_monthly_budget: minMb});
             }
         )
-        // .then(
-        //     console.log,
-        //     result => this.setState({
-        //         dataRecibida: result.data.data
-        //     }),
-        // )
-        // .then(
-        //     console.log,
-        //     results => results.json,
-        //     results => this.setState({dataRecibida: results},
-        //     console.log(results))
-        // )
       }
 
     render(){
@@ -172,44 +170,31 @@ export default class Buscador extends Component {
                         </div>
                     </div>
                 </form>
-                {this.state.dataRecibida.map(item => 
-                    <div>
-                        <div className="row">
-                            <div className="col-2 d-flex justify-content-center">
-                                <b>Ciudad</b>
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                <b>Identificador</b> 
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                <b>Presupuesto Mensual</b>
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                <b>Precio por Mensaje</b>
-                            </div>
-                            <div className="col-4 d-flex justify-content-center">
-                                <b>Deporte</b>
-                            </div>
-                        </div>
-                        <div className="row barraDatos">
-                            <div className="col-2 d-flex justify-content-center">
-                                {item.city} 
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                {item.id} 
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                {item.monthly_budget}€ 
-                            </div>
-                            <div className="col-2 d-flex justify-content-center">
-                                {item.price_per_lead}€ 
-                            </div>
-                            <div className="col-4 d-flex justify-content-center">
-                                {item.sport_name} 
-                            </div>
-                        </div>
-                    </div>
-                )}
+                {this.state.max_price_per_lead && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El precio por mensaje máximo es de: {this.state.max_price_per_lead}€</p>
+                    </div> 
+                </div>)}
+                {this.state.min_price_per_lead && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El precio por mensaje mínimo es de: {this.state.min_price_per_lead}€</p>
+                    </div> 
+                </div>)}    
+                {this.state.max_monthly_budget && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El presupuesto máximo es de: {this.state.max_monthly_budget}€</p>
+                    </div> 
+                </div>)}
+                {this.state.min_monthly_budget && ( 
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                        <p>El presupuesto mínimo es de: {this.state.min_monthly_budget}€</p>
+                    </div> 
+                </div>)}
+            
                 {/* <div className="row">
                     <div className="col-12 d-flex justify-content-center">
                         <XYPlot
