@@ -26,15 +26,25 @@ export default class Buscador extends Component {
           max_monthly_budget: null,
           min_monthly_budget: null,
           media_monthly_budget: null,
-          historicalPpl:[
-
-          ],
-          historicalMb:[
+          dataInicial:[
 
           ],
         };
       }
-    
+
+    componentDidMount(){
+        api.datosIniciales("","")
+        .then(
+            all => {
+                let data = {
+                    dataInicial: all.data,
+                }
+                console.log(data);
+                this.setState(data);
+            }
+        )
+    }
+      
     handleChange = address => {
         this.setState({
           address,
@@ -85,17 +95,7 @@ export default class Buscador extends Component {
                 let sumMb = valuesMb.reduce((previous, current) => current += previous);
                 let avgMb = (sumMb / valuesMb.length).toFixed(2);
 
-                for (let item of this.state.historicalPpl){
-                    
-                }
-
-                for (let item of this.state.historicalMb){
-                    
-                }
-                
                 let s = {
-                    historicalPpl: [...this.state.historicalPpl, {x: this.state.address+' ,'+this.state.sport, y: maxPpL}],
-                    historicalMb: [...this.state.historicalMb, {x: this.state.address+' ,'+this.state.sport, y: maxMb}],
                     dataRecibida: res.data,
                     max_price_per_lead: maxPpL,
                     min_price_per_lead: minPpL,
@@ -112,12 +112,12 @@ export default class Buscador extends Component {
 
       submitGenerar = event =>{
         event.preventDefault();
-        api.generarR();
+        api.generarRanking();
       }
 
-      submitVer = event => {
+      submitVisualizar = event => {
         event.preventDefault();
-        api.visualizarR();
+        api.visualizarRanking()
       }
 
     render(){
@@ -295,7 +295,7 @@ export default class Buscador extends Component {
                                 Generar Ranking
                             </Button>
                         </form>
-                        <form onSubmit={this.submitVer.bind(this)}>
+                        <form onSubmit={this.submitVisualizar.bind(this)}>
                             <Button 
                                 bsSize="small"
                                 type="submit"
