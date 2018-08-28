@@ -35,13 +35,14 @@ export default class Buscador extends Component {
         .then(
             all => {
                 let maxStartPpl = Math.max(...all.data.map(item => item.price_per_lead));
-                let maxStartMb = Math.max(...all.data.map(item => item.monthly_budget))
+                let maxStartMb = Math.max(...all.data.map(item => item.monthly_budget));
+                let graPPl = this.ordenarPpl(all.data);
 
                 let data = {
                     dataInicial: all.data,
                     max_ppl: maxStartPpl,
                     max_mb: maxStartMb,
-
+                    graphicPPL: graPPl,
                 }
 
                 console.log(data);
@@ -83,7 +84,7 @@ export default class Buscador extends Component {
             return arrayFinal 
         }
     }
-      
+
     handleChange = address => {
         this.setState({
           address,
@@ -297,14 +298,20 @@ export default class Buscador extends Component {
                         <XYPlot
                             margin={{bottom: 70}}
                             xType="ordinal"
-                            width={300}
-                            height={300}>
+                            width={350}
+                            height={350}>
                             <VerticalGridLines />
                             <HorizontalGridLines />
                             <XAxis tickLabelAngle={-45} />
                             <YAxis />
                             <VerticalBarSeries
-                                data={this.state.historicalPpl}/>
+                                data={[
+                                    {x: this.state.graphicPPL[0].city +","+ this.state.graphicPPL[0].sport_id, y: this.state.graphicPPL[0].price_per_lead},
+                                    {x: this.state.graphicPPL[1].city +","+ this.state.graphicPPL[1].sport_id, y: this.state.graphicPPL[1].price_per_lead},
+                                    {x: this.state.graphicPPL[2].city +","+ this.state.graphicPPL[2].sport_id, y: this.state.graphicPPL[2].price_per_lead},
+                                    {x: this.state.graphicPPL[3].city +","+ this.state.graphicPPL[3].sport_id, y: this.state.graphicPPL[3].price_per_lead},
+                                    {x: this.state.graphicPPL[4].city +","+ this.state.graphicPPL[4].sport_id, y: this.state.graphicPPL[4].price_per_lead},
+                                ]}/>
                         </XYPlot>
                     </div>
                     <div className="col-4 d-flex justify-content-center">
