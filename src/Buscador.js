@@ -16,19 +16,17 @@ export default class Buscador extends Component {
           sport: '',
           city:'',
           place_id:'',
-          dataRecibida:[
-
-          ],
-          takeMax: '',
+          dataRecibida:[],
           max_price_per_lead: null,
           min_price_per_lead: null,
           media_price_per_lead: null,
           max_monthly_budget: null,
           min_monthly_budget: null,
           media_monthly_budget: null,
-          dataInicial:[
-
-          ],
+          max_ppl:null,
+          max_mb: null,
+          dataInicial:[],
+          graphicPPL:[],
         };
       }
 
@@ -36,13 +34,54 @@ export default class Buscador extends Component {
         api.datosIniciales("","")
         .then(
             all => {
+                let maxStartPpl = Math.max(...all.data.map(item => item.price_per_lead));
+                let maxStartMb = Math.max(...all.data.map(item => item.monthly_budget))
+
                 let data = {
                     dataInicial: all.data,
+                    max_ppl: maxStartPpl,
+                    max_mb: maxStartMb,
+
                 }
+
                 console.log(data);
                 this.setState(data);
+                console.log(this.ordenarPpl(all.data));
             }
         )
+    }
+
+    ordenarPpl(arreglo){     
+        let stateArray = arreglo.map(item =>
+            {
+                let city = item.city;
+                let price_per_lead = item.price_per_lead;
+                let sport_id= item.sport_id;
+            return {city , price_per_lead, sport_id};
+            });
+
+        let resultOrder = stateArray.sort(function(a,b){
+            return b.price_per_lead-a.price_per_lead
+        })
+        let salida=false;
+        let i= 0;
+        let arrayFinal = [];
+        arrayFinal.push(resultOrder[i]);   
+            
+        do{
+            i++;
+            let valueFinal = arrayFinal[i-1].sport_id;
+            let resultFinal = resultOrder[i].sport_id;
+            if( valueFinal != resultFinal){
+                arrayFinal.push(resultOrder[i]);
+            }
+            if(arrayFinal.length==5){
+                salida = true
+            };
+        }
+        while(salida==false){
+            return arrayFinal 
+        }
     }
       
     handleChange = address => {
