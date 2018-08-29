@@ -30,11 +30,12 @@ export default class Buscador extends Component {
           graphicPPL:[],
           graphicMb:[],
         };
-
       }
 
 
     componentDidMount(){
+        this.contador();
+        
         api.datosIniciales("","")
         .then(
             all => {
@@ -54,6 +55,12 @@ export default class Buscador extends Component {
                 this.setState(data);
             }
         )
+    }
+
+    contador(){
+        setTimeout(function(){ 
+            document.getElementById("counter").style.display='none'
+        }, 11000);
     }
 
     ordenarPpl(arreglo){     
@@ -295,7 +302,7 @@ export default class Buscador extends Component {
                     </div>
                 </form>
                 
-                <div className="row">
+                <div id="counter" className="row">
                     <div className="col-12 d-flex justify-content-center">
                     <Loader 
                         type="TailSpin"
