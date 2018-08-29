@@ -5,6 +5,7 @@ import {classnames} from "./helpers";
 import './Buscador.css';
 import api from './apiService.js';
 import {XYPlot,XAxis,YAxis,VerticalGridLines,HorizontalGridLines,VerticalBarSeries} from 'react-vis';
+import Loader from 'react-loader-spinner'
 
 export default class Buscador extends Component {
 
@@ -29,7 +30,9 @@ export default class Buscador extends Component {
           graphicPPL:[],
           graphicMb:[],
         };
+
       }
+
 
     componentDidMount(){
         api.datosIniciales("","")
@@ -47,7 +50,6 @@ export default class Buscador extends Component {
                     graphicPPL: graPPl,
                     graphicMb: graMb,
                 }
-
                 console.log(data);
                 this.setState(data);
             }
@@ -292,6 +294,24 @@ export default class Buscador extends Component {
                         </div>
                     </div>
                 </form>
+                
+                <div className="row">
+                    <div className="col-12 d-flex justify-content-center">
+                    <Loader 
+                        type="TailSpin"
+                        color="#00BFFF"
+                        height="180"	
+                        width="180"
+                    />
+                    </div>
+                    <div className="col-12 d-flex justify-content-center">
+                        <h3>Cargando datos...</h3>
+                    </div>
+                    <div className="col-12 d-flex justify-content-center">
+                        <h6>Cuando acabemos de cargar podrá realizar su búsqueda</h6>
+                    </div>
+                </div>
+
                 {this.state.max_price_per_lead && ( 
                 <div className="row">
                     <div className="col-12 d-flex justify-content-center">
