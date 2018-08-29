@@ -27,6 +27,7 @@ export default class Buscador extends Component {
           max_mb: null,
           dataInicial:[],
           graphicPPL:[],
+          graphicMb:[],
         };
       }
 
@@ -37,17 +38,18 @@ export default class Buscador extends Component {
                 let maxStartPpl = Math.max(...all.data.map(item => item.price_per_lead));
                 let maxStartMb = Math.max(...all.data.map(item => item.monthly_budget));
                 let graPPl = this.ordenarPpl(all.data);
+                let graMb = this.ordenarMb(all.data);
 
                 let data = {
                     dataInicial: all.data,
                     max_ppl: maxStartPpl,
                     max_mb: maxStartMb,
                     graphicPPL: graPPl,
+                    graphicMb: graMb,
                 }
 
                 console.log(data);
                 this.setState(data);
-                console.log(this.ordenarPpl(all.data));
             }
         )
     }
@@ -57,31 +59,68 @@ export default class Buscador extends Component {
             {
                 let city = item.city;
                 let price_per_lead = item.price_per_lead;
-                let sport_id= item.sport_id;
+                let sport_id = item.sport_id;
             return {city , price_per_lead, sport_id};
             });
 
         let resultOrder = stateArray.sort(function(a,b){
             return b.price_per_lead-a.price_per_lead
         })
-        let salida=false;
-        let i= 0;
+        let salida = false;
+        let i = 0;
+        let h = 1;
         let arrayFinal = [];
         arrayFinal.push(resultOrder[i]);   
             
         do{
             i++;
-            let valueFinal = arrayFinal[i-1].sport_id;
+            let valueFinal = arrayFinal[h-1].sport_id;
             let resultFinal = resultOrder[i].sport_id;
             if( valueFinal != resultFinal){
                 arrayFinal.push(resultOrder[i]);
+                h++;
             }
-            if(arrayFinal.length==5){
+            if(arrayFinal.length == 5){
                 salida = true
             };
         }
-        while(salida==false){
+        while(salida == false){
             return arrayFinal 
+        }
+    }
+
+    ordenarMb(arreglo){     
+        let stateArrayMb = arreglo.map(item =>
+            {
+                let city = item.city;
+                let monthly_budget = item.monthly_budget;
+                let sport_id = item.sport_id;
+            return {city , monthly_budget, sport_id};
+            });
+
+        let resultOrderMb = stateArrayMb.sort(function(a,b){
+            return b.monthly_budget - a.monthly_budget            
+        })
+        let salidaMb = false;
+        let j = 0;
+        let k = 1;
+        let arrayFinalMb = [];
+        arrayFinalMb.push(resultOrderMb[j]);   
+        
+        do{
+            j++;
+            let valueFinalMb = arrayFinalMb[k-1].sport_id;
+            let resultFinalMb = resultOrderMb[j].sport_id;
+            if( valueFinalMb != resultFinalMb){
+                arrayFinalMb.push(resultOrderMb[j]);
+                k++;
+            }
+            if(arrayFinalMb.length == 5){
+                salidaMb = true
+            };
+        }
+        while(salidaMb == false){
+            return arrayFinalMb 
         }
     }
 
@@ -298,8 +337,8 @@ export default class Buscador extends Component {
                         <XYPlot
                             margin={{bottom: 70}}
                             xType="ordinal"
-                            width={350}
-                            height={350}>
+                            width={300}
+                            height={300}>
                             <VerticalGridLines />
                             <HorizontalGridLines />
                             <XAxis tickLabelAngle={-45} />
@@ -325,7 +364,13 @@ export default class Buscador extends Component {
                             <XAxis tickLabelAngle={-45} />
                             <YAxis />
                             <VerticalBarSeries
-                                data={this.state.historicalMb}/>
+                                data={[
+                                    {x: this.state.graphicMb[0].city +","+ this.state.graphicMb[0].sport_id, y: this.state.graphicMb[0].monthly_budget},
+                                    {x: this.state.graphicMb[1].city +","+ this.state.graphicMb[1].sport_id, y: this.state.graphicMb[1].monthly_budget},
+                                    {x: this.state.graphicMb[2].city +","+ this.state.graphicMb[2].sport_id, y: this.state.graphicMb[2].monthly_budget},
+                                    {x: this.state.graphicMb[3].city +","+ this.state.graphicMb[3].sport_id, y: this.state.graphicMb[3].monthly_budget},
+                                    {x: this.state.graphicMb[4].city +","+ this.state.graphicMb[4].sport_id, y: this.state.graphicMb[4].monthly_budget},
+                                ]}/>
                         </XYPlot>
                     </div>
                     <div className="col-2"/>
