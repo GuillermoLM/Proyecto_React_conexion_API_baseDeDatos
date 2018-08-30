@@ -64,8 +64,8 @@ const datos = (sport_id, place_id) => new Promise((resolve,reject) => {
         })
 })
 
-const generarRanking = (entity_id, sport_id) => new Promise((resolve, reject) => {
-    axios.post('https://dev.entrenar.me/api/test/ranking',{entity_id,sport_id,ranking:'ranking'})
+const generarRanking = (entity_id, sport_id, ranking) => new Promise((resolve, reject) => {
+    axios.post('https://dev.entrenar.me/api/test/ranking',{entity_id,sport_id,ranking})
     .then(function (response) {
         resolve(response);
        })

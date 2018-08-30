@@ -29,6 +29,7 @@ export default class Buscador extends Component {
           dataInicial:[],
           graphicPPL:[],
           graphicMb:[],
+          generarR:[],
         };
       }
 
@@ -43,6 +44,7 @@ export default class Buscador extends Component {
                 let maxStartMb = Math.max(...all.data.map(item => item.monthly_budget));
                 let graPPl = this.ordenarPpl(all.data);
                 let graMb = this.ordenarMb(all.data);
+                let genR = this.hacerRanking(all.data);
 
                 let data = {
                     dataInicial: all.data,
@@ -50,6 +52,7 @@ export default class Buscador extends Component {
                     max_mb: maxStartMb,
                     graphicPPL: graPPl,
                     graphicMb: graMb,
+                    generarR: genR,
                 }
                 console.log(data);
                 this.setState(data);
@@ -61,6 +64,41 @@ export default class Buscador extends Component {
         setTimeout(function(){ 
             document.getElementById("counter").style.display='none'
         }, 11000);
+    }
+
+    hacerRanking(arreglo){     
+        let stateArray = arreglo.map(item =>
+            {
+                let entity_id = item.entity_id;
+                let lead_score = item.lead_score;
+                let sport_id = item.sport_id;
+            return {entity_id , lead_score, sport_id};
+            });
+
+        let resultOrder = stateArray.sort(function(a,b){
+            return b.lead_score-a.lead_score
+        })
+        let salida = false;
+        let i = 0;
+        let h = 1;
+        let arrayFinal = [];
+        arrayFinal.push(resultOrder[i]);   
+            
+        do{
+            i++;
+            let valueFinal = arrayFinal[h-1].sport_id;
+            let resultFinal = resultOrder[i].sport_id;
+            if( valueFinal != resultFinal){
+                arrayFinal.push(resultOrder[i]);
+                h++;
+            }
+            if(arrayFinal.length == 5){
+                salida = true
+            };
+        }
+        while(salida == false){
+            return arrayFinal 
+        }
     }
 
     ordenarPpl(arreglo){     
@@ -200,7 +238,15 @@ export default class Buscador extends Component {
 
       submitGenerar = event =>{
         event.preventDefault();
-        api.generarRanking();
+        api.generarRanking("","","")
+        .then(
+            res => {
+                let s = {
+                    generarR: res.data,
+                }
+                console.log(s);
+            }
+        );
       }
 
       submitVisualizar = event => {
